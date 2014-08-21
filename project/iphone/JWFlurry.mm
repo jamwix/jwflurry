@@ -21,6 +21,7 @@
 
 - (void)logEvent: (NSString*) eventName withParams: (NSDictionary*) params isTimed: (BOOL) isTimed
 {
+    NSLog(@"Logging event '%@' isTimed: %d with params: %@", eventName, isTimed, params);
     if (params)
     {
         if (isTimed)
@@ -53,6 +54,8 @@ extern "C"
     
     NSDictionary* parseParamsJW(const char *sParams)
     {
+        if (!sParams || strlen(sParams) <= 0) return nil;
+
         NSString *params = [ [NSString alloc] initWithUTF8String: sParams ];
         NSData *data = [params dataUsingEncoding:NSUTF8StringEncoding];
 
@@ -81,12 +84,7 @@ extern "C"
     void logJWEvent(const char *sEventName, const char *sEventParams, bool isTimed)
     {
 		NSString *eventName = [ [NSString alloc] initWithUTF8String: sEventName ];
-        NSDictionary *parameters = nil;
-        if (sEventParams)
-        {
-            parameters = parseParamsJW(sEventParams);
-            if (!parameters) return;
-        }
+        NSDictionary *parameters = parseParamsJW(sEventParams);
 
         [myFlurry logEvent: eventName withParams: parameters isTimed: isTimed];
     }
@@ -94,8 +92,7 @@ extern "C"
     void endJWTimedEvent(const char *sEventName, const char *sEventParams)
     {
 		NSString *eventName = [ [NSString alloc] initWithUTF8String: sEventName ];
-        NSDictionary *parameters = nil;
-        if (sEventParams) parameters = parseParamsJW(sEventParams);
+        NSDictionary *parameters = parseParamsJW(sEventParams);
         
         [myFlurry endTimedEvent: eventName withParams: parameters];
     }
