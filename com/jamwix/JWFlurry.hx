@@ -12,7 +12,7 @@ class JWFlurry {
 		#end
 	}
 	
-	public static function logEvent(eventName:String, dParams:Dynamic, isTimed:Bool):Void
+	public static function logEvent(eventName:String, dParams:Dynamic = null, isTimed:Bool = false):Void
 	{
 		#if ios
 		var sParams = null;
@@ -33,7 +33,7 @@ class JWFlurry {
 		#end
 	}
 
-	public static function endTimedEvent(eventName:String, dParams:Dynamic):Void
+	public static function endTimedEvent(eventName:String, dParams:Dynamic = null):Void
 	{
 		#if ios
 		var sParams = null;
