@@ -3,5 +3,6 @@
 	
 	<ndll name="jwflurry" if="ios" />
 	<dependency name="SystemConfiguration.framework" if="ios" />
+	<dependency name="Security.framework" if="ios" />
 	
 </project>
