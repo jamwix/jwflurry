@@ -5,9 +5,9 @@
 
 @interface JWFlurry: NSObject 
 
-- (void)initWithApiKey: (NSString*) apiKey doReportCrashes:(BOOL) reportCrashes
-- (void)logEvent: (NSString*) eventName withParams: (NSDictionary*) params isTimed: (BOOL) isTimed
-- (void)endTimedEvent: (NSString*) eventName withParams: (NSDictionary*) params
+- (void)initWithApiKey: (NSString*) apiKey doReportCrashes:(BOOL) reportCrashes;
+- (void)logEvent: (NSString*) eventName withParams: (NSDictionary*) params isTimed: (BOOL) isTimed;
+- (void)endTimedEvent: (NSString*) eventName withParams: (NSDictionary*) params;
 
 @end
 
@@ -51,6 +51,23 @@ extern "C"
 {
 	static JWFlurry* myFlurry = nil;
     
+    NSDictionary* parseParamsJW(const char *sParams)
+    {
+        NSString *params = [ [NSString alloc] initWithUTF8String: sParams ];
+        NSData *data = [params dataUsingEncoding:NSUTF8StringEncoding];
+
+        NSError *error;
+        NSDictionary *parameters = 
+            [NSJSONSerialization JSONObjectWithData: data options: 0 error: &error];
+        if (error)
+        {
+            NSLog(@"Unable to parse params %@", params);
+            return nil;
+        }
+
+        return parameters;
+    }
+
     void initJWFlurry(const char *sApiKey, bool bReportCrashes)
     {
 		NSString *apiKey = [ [NSString alloc] initWithUTF8String: sApiKey ];
@@ -81,22 +98,5 @@ extern "C"
         if (sEventParams) parameters = parseParamsJW(sEventParams);
         
         [myFlurry endTimedEvent: eventName withParams: parameters];
-    }
-
-    NSDictionary* parseParamsJW(const char *sParams)
-    {
-        NSString *params = [ [NSString alloc] initWithUTF8String: sParams ];
-        NSData *data = [params dataUsingEncoding:NSUTF8StringEncoding];
-
-        NSError *error;
-        NSDictionary parameters = 
-            [NSJSONSerialization JSONObjectWithData: data options: 0 error: &error];
-        if (error)
-        {
-            NSLog("Unable to parse params %@", params);
-            return nil;
-        }
-
-        return parameters;
     }
 }
