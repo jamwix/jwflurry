@@ -54,13 +54,6 @@ class JWFlurry {
 		#end
 	}
 
-	public static function showInterstitial():Void
-	{
-		#if ios
-		chartboost_showinterstitial();
-		#end
-	}
-	
 	// Native Methods
 	
 	
