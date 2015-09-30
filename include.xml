@@ -4,5 +4,8 @@
 	<ndll name="jwflurry" if="ios" />
 	<dependency name="SystemConfiguration.framework" if="ios" />
 	<dependency name="Security.framework" if="ios" />
+
+	<dependency name="jwflurry" path="dependencies/android" if="android" />
+	<android extension="com.jamwix.JWFlurry" />
 	
 </project>
